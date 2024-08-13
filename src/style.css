@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .body-wrapper{
+        @apply px-4 md:px-20;
+    }
+
+    .navbar-menus{
+        @apply md:!flex;
+    }
+
+    .navbar-menus a{
+        @apply py-2 px-6 rounded-full w-full md:w-fit text-center;
+        li{
+            @apply 
+            text-gray-500 
+            font-bold 
+            text-base
+            ;
+        }
+    }
+
+    .navbar-menus a:hover > li{
+        @apply
+        text-red-500
+        ;
+    }
+
+    .navbar-menus a.active {
+        @apply bg-red-500;
+        li{
+            @apply text-white;
+        }
+    }
+
+    .input-field{
+        @apply border-[1px] h-10 rounded-full px-4 font-bold
+        text-black
+        hover:border-black
+        ;
+    }
+
+    .navbar-search input{
+        @apply hidden md:block
+    }
+
+    .btn-icon {
+        @apply w-10 h-10 items-center border-[1px];
+    }
+
+    .navbar-sm-menu{
+        @apply md:hidden flex rounded-[8px] align-middle items-center justify-center
+    }
+
+    .item-card{
+        @apply flex flex-col justify-end items-end basis-1/6 h-60;
+        .item-text{
+            @apply w-full pt-14 pb-3 border-[1px] border-gray-200 text-black text-center px-3 rounded-[16px] capitalize;
+        }
+    }
+
+    .item-card:hover{
+        .item-text{
+            @apply border-2 border-red-500 text-red-600
+        }
+    }
+
+    
+}
