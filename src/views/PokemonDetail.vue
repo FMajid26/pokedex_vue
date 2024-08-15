@@ -124,7 +124,6 @@ import { onBeforeMount,ref, onMounted, watch, nextTick, onUpdated } from 'vue';
 import { bgColor, currentDataOpen, fetchEvolveLine, fetchPokemonAbility, fetchPokemonSpecies, fetchPokemonVarieties, flavorTextEn, openPokemonDetail, pokemonAbility, pokemonEvolveLine, pokemonSpecies, reactivePokeData } from '@/routes/fetch_api';
 import SkillCard from '@/components/small_comp/SkillCard.vue';
 import Loading from '@/components/Loading.vue';
-import Accordion from '@/components/small_comp/Accordion.vue';
 import Moves from './Moves.vue';
 import BackToTopButton from '@/components/small_comp/BackToTopButton.vue';
 
