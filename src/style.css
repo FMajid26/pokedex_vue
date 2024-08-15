@@ -65,7 +65,7 @@
 
     .item-card:hover{
         .item-text{
-            @apply border-2 border-red-500 text-red-600
+            @apply outline outline-pokeRed outline-2 text-red-600
         }
     }
 

@@ -7,7 +7,11 @@
                 <img src="../assets/logo/pokedex_logo.png" class="object-fill h-10 me-6" alt="pokedex-logo">          
                 <!-- HAMBURGER MENU -->
                 <div class="btn-icon navbar-sm-menu" @click="navbarMenusClicked">
-                    <img src="../assets/icons/linear/menu.svg" >
+                    <svg class="size-4 stroke-black" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 7H21" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M3 12H21" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M3 17H21" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
                 </div>
             </div>
             

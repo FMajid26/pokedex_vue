@@ -10,8 +10,8 @@
                         : '/src/assets/img/img-not-found.png'"
                     class="basis-1/3 w-full"
                 >
-                <div class="flex flex-col gap-y-1 w-full text-black basis-2/3 justify-center items-end md:items-start">
-                    <p class="text-2xl font-bold line-clamp-1 capitalize">{{ props.items.name }}</p>
+                <div class="flex flex-col gap-y-1 w-full text-black basis-2/3 justify-center items-start">
+                    <p class="text-2xl font-bold capitalize">{{ props.items.name }}</p>
                     <p class="text-lg text-black/60 capitalize">{{ props.items.category }}</p>
                 </div>
             

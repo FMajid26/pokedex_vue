@@ -1,8 +1,8 @@
 <template>
     <div class="flex h-[200px] my-10 relative items-center justify-between" ref="mainContent">
         <div class="z-10">
-            <h1 class="text-5xl font-bold mb-1 text-pokeRed">Items</h1>
-            <p class="text-2xl text-gray-500">List of items including potion, berries, and HM/TM</p>
+            <h1 class="text-5xl font-bold mb-1 text-pokeRed">Berries</h1>
+            <!-- <p class="text-2xl text-gray-500">List of items including potion, berries, and HM/TM</p> -->
         </div>
         <img src="../assets/img/pokemon-section-img.png" class="h-full absolute right-0" alt="">
     </div>
@@ -18,7 +18,7 @@
         <div class="w-full h-fit">
             <div ref="scrollHere">
                 <h2 class="text-4xl font-bold mb-1">All Items</h2>
-                <p class="text-l text-gray-500">{{ itemsAll.total }} total Items</p>
+                <p class="text-l text-gray-500">{{ itemsAll.total }} total Item</p>
             </div>
 
             <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 relative">
@@ -44,6 +44,8 @@
     <Loading
         v-if="isLoading"
     />
+
+    <BackToTopButton/>
     
 </template>
 
@@ -55,6 +57,7 @@ import { fetchAllItems, itemsAll } from '@/routes/fetch_items';
 import ItemsCard from '@/components/ItemsCard.vue';
 import Pagination from '@/components/small_comp/Pagination.vue';
 import Loading from '@/components/Loading.vue';
+import BackToTopButton from '@/components/small_comp/BackToTopButton.vue';
 
 let searchInput = ref('')
 let isLoading = ref(false)
@@ -116,7 +119,7 @@ const filteredItems = computed(() =>{
 
 watch(filteredItems, ()=>{
     currentData.totalPage = Math.ceil(filteredItems.value.length / currentData.perPage)
-    console.log("Total Page A: "+currentData.totalPage);
+    // console.log("Total Page A: "+currentData.totalPage);
 })
 
 async function checkData(){

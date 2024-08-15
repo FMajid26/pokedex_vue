@@ -1,7 +1,7 @@
 <template>
     <div class="bg-black/60 z-50 flex flex-col gap-y-4 w-full h-full fixed top-0 left-0 px-4 py-4 justify-center items-center md:py-10" v-show="modalOpened">
         
-        <div class="flex flex-col bg-white w-full sm:min-w-[400px] sm:max-w-[500px] md:w-[640px] h-full rounded-[16px] overflow-hidden">
+        <div class="flex flex-col bg-white w-full h-fit max-h-full sm:min-w-[400px] sm:max-w-[500px] md:w-[640px] rounded-[16px] overflow-hidden">
             <div class="flex flex-row w-full gap-x-3 px-4 py-6 text-white justify-between" :class="props.bgColor">
                 <div class="flex flex-col gap-y-1 w-full">
                     <p class="text-2xl font-bold line-clamp-1">{{ props.moveDetail.name_en }}</p>
@@ -16,19 +16,13 @@
                 </div>
             </div>
 
-            <div class="flex flex-col p-4 text-black/60 gap-y-3">
-                <div class="flex flex-col w-full h-fit">
+            <div class="flex flex-col h-fit p-4 text-black/60 gap-y-3">
+                <div class="flex flex-col w-full h-fit overflow-auto">
                     <p class="text-lg text-black font-bold">Description : </p>
                     <p class="text-md" v-if="props?.moveDetail.effect_entries.length != 0">
                         {{ props.moveDetail.effect_entries[0].effect}}
                     </p>
                 </div>
-                <!-- <div class="flex flex-col w-full h-fit">
-                    <p class="text-lg text-black font-bold">Ailment : </p>
-                    <p class="text-md">
-                        Paralysis (10% chance)
-                    </p>
-                </div> -->
             </div>
         </div>
 

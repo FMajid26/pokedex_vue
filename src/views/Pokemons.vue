@@ -18,10 +18,13 @@
 
             <!-- SORT & FILTER -->
             <div class="w-full flex flex-row mt-2 gap-3">
-                <button class="flex w-full flex-row items-center justify-center gap-2 input-field" type="button"
+                <button class="flex w-full flex-row sm:hidden items-center justify-center gap-2 input-field" type="button"
                     @click="filterOptionsClicked"
                 >
-                    <img src="../assets/icons/linear/filter.svg" class="h-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.40002 2.09998H18.6C19.7 2.09998 20.6 2.99998 20.6 4.09998V6.29998C20.6 7.09998 20.1 8.09998 19.6 8.59998L15.3 12.4C14.7 12.9 14.3 13.9 14.3 14.7V19C14.3 19.6 13.9 20.4 13.4 20.7L12 21.6C10.7 22.4 8.90002 21.5 8.90002 19.9V14.6C8.90002 13.9 8.50002 13 8.10002 12.5L4.30002 8.49998C3.80002 7.99998 3.40002 7.09998 3.40002 6.49998V4.19998C3.40002 2.99998 4.30002 2.09998 5.40002 2.09998Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10.93 2.09998L6 9.99998" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                     Filter
                 </button>
               
@@ -80,19 +83,21 @@
     </div>
     
     <Loading
-        v-show="isLoading"
+    v-show="isLoading"
     />
-
-    <div class="btn w-14 h-14 fixed bottom-10 right-10 z-40">
-        <img src="../assets/icons/linear/arrow-up.svg" class="size-6" @click="backToTop">
-    </div>
+    
+    <BackToTopButton/>
+    <!-- <button @click="backToTop" class="btn p-0 h-14 justify-center fixed bottom-10 right-10 flex-col aspect-square z-40">
+        <img src="../assets/icons/linear/arrow-up.svg" class="size-6 !stroke-white fill-white aspect-square"/>
+    </button> -->
+    
     
 </template>
 
 <script setup>
 import PokemonCard from '@/components/PokemonCard.vue';
 import Checkbox from '@/components/small_comp/Checkbox.vue';
-import {ref, onMounted, watch, onBeforeUnmount, defineAsyncComponent, reactive, computed } from 'vue';
+import {ref, onMounted, watch, onBeforeUnmount, defineAsyncComponent, reactive, computed, onBeforeMount } from 'vue';
 import axios from 'axios';
 import '@/routes/filter_api.js'
 import { fetchFilterOptions, filterPokemonType } from '@/routes/filter_api.js';
@@ -100,6 +105,7 @@ import * as pokeApi from '@/routes/fetch_api';
 import Pagination from '@/components/small_comp/Pagination.vue';
 import Loading from '@/components/Loading.vue';
 import SearchField from '@/components/small_comp/SearchField.vue';
+import BackToTopButton from '@/components/small_comp/BackToTopButton.vue';
 
 let searchInput = ref("")
 let filterSelected = ref([])
@@ -111,24 +117,13 @@ const currentData = reactive({
     to: 0,
     totalPage: 0
 })
-const sortOptions = [
-    {id: 1, sortBy: "ID (Low - High)", value: "a.id - b.id"},
-    {id: 2, sortBy: "ID (High - Low)", value: "b.id - a.id"},
-]
-let sortSelected = ref(1)
+
 let isFilterShown = ref(false)
 
 function filterOptionsClicked(){
     isFilterShown.value = !isFilterShown.value
+    backToTop()
 }
-
-watch(currentPage, ()=>{
-    console.log("page : "+currentPage.value);
-    sessionStorage.setItem('poke-current-page', currentPage.value)
-
-    currentData.to = currentPage.value * currentData.perPage
-    currentData.from = currentData.to - currentData.perPage
-});
 
 const filteredPokemon = computed(()=>{
     let searchValue = searchInput.value
@@ -165,6 +160,40 @@ watch(filteredPokemon, ()=>{
     // filteredPokemon.value.sort((a,b) => b.id - a.id)
 })
 
+watch(filterSelected, (newFilter, oldFilter) => {
+    sessionStorage.setItem('filter-selected', JSON.stringify(filterSelected.value))
+    console.log("New Filter : "+newFilter.length);
+    let storageFilter = JSON.parse(sessionStorage.getItem('filter-selected'))
+    console.log("Filter on Storage : "+storageFilter.length);
+    console.log("Old Filter : "+oldFilter.length);
+
+    // if(newFilter.length != storageFilter.length){
+    //     sessionStorage.setItem('poke-current-page', 1)
+    // }else{
+    if((newFilter.length != oldFilter.length) && pokeApi.reactivePokeData.about.length != null){
+        sessionStorage.setItem('poke-current-page', 1)
+    }
+    pokeApi.reactivePokeData.about = []
+    // }
+    checkPagination()
+    
+    // currentData.to = currentPage.value * currentData.perPage
+    // currentData.from = currentData.to - currentData.perPage
+})
+
+watch(currentPage, ()=>{
+    checkPagination()
+    console.log("page : "+currentPage.value);
+    // sessionStorage.setItem('poke-current-page', currentPage.value)
+
+    // currentData.to = currentPage.value * currentData.perPage
+    // currentData.from = currentData.to - currentData.perPage
+});
+
+watch(searchInput, ()=>{
+    sessionStorage.setItem('search-input', searchInput.value)
+})
+
 async function nextPrevButton(act){
     if(act == 'next'){
         currentPage.value ++
@@ -180,7 +209,7 @@ async function nextPrevButton(act){
 
 async function checkData(){
     if(filterPokemonType.value.length == 0){
-        fetchFilterOptions()
+        await fetchFilterOptions()
     }
 
     if(pokeApi.pokemonList.list.length == 0){
@@ -204,6 +233,16 @@ async function checkPagination(){
     currentData.from = currentData.to - currentData.perPage
 }
 
+async function checkFilter() {
+    if(sessionStorage.getItem('filter-selected') != null){
+        filterSelected.value = JSON.parse(sessionStorage.getItem('filter-selected'))
+    }
+
+    if(sessionStorage.getItem('search-input') != null){
+        searchInput.value = sessionStorage.getItem('search-input')
+    }
+}
+
 function backToTop(){
     scrollTo({top, behavior:'smooth'})
 }
@@ -211,6 +250,7 @@ function backToTop(){
 onMounted(()=>{
     pokeApi.setBgColorToWhite()
     checkData()
+    checkFilter()
     checkPagination()
 })
 

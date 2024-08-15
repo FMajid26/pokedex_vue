@@ -2,7 +2,10 @@
     <div class="flex flex-col h-fit md:pt-12 justify-left relative">
 
         <button @click="$router.back()" class="btn w-fit fixed z-40">
-            <img src="../assets/icons/linear/arrow-left.svg" class="h-4 w-4" alt="" srcset="">
+            <svg class="size-4 stroke-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.57 5.92993L3.5 11.9999L9.57 18.0699"stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20.5 12H3.67004"stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             Back
         </button>
 
@@ -101,6 +104,12 @@
         </div>    
 
     </div>
+
+    <Loading
+        v-show="isLoading"
+    />
+
+    <BackToTopButton/>
     
 </template>
 
@@ -110,13 +119,14 @@ const props = defineProps(['id'])
 // const id = 'charizard'
 
 import PokemonCard from '@/components/PokemonCard.vue';
-import data from '@/assets/wartortle.json'
 import Badge from '@/components/small_comp/Badge.vue';
 import { onBeforeMount,ref, onMounted, watch, nextTick, onUpdated } from 'vue';
 import { bgColor, currentDataOpen, fetchEvolveLine, fetchPokemonAbility, fetchPokemonSpecies, fetchPokemonVarieties, flavorTextEn, openPokemonDetail, pokemonAbility, pokemonEvolveLine, pokemonSpecies, reactivePokeData } from '@/routes/fetch_api';
 import SkillCard from '@/components/small_comp/SkillCard.vue';
+import Loading from '@/components/Loading.vue';
 import Accordion from '@/components/small_comp/Accordion.vue';
 import Moves from './Moves.vue';
+import BackToTopButton from '@/components/small_comp/BackToTopButton.vue';
 
 const flavor_text = ref('')
 const isLoading = ref(false)
@@ -125,7 +135,15 @@ watch(reactivePokeData.varieties, ()=>{
     console.log("Varieties: "+reactivePokeData.varieties.length);
 })
 
-openPokemonDetail('https://pokeapi.co/api/v2/pokemon/'+props.id)
-// .then(fetchVarieties())
-// .finally(forceRender())
+async function loadData() {
+    isLoading.value = true
+    await openPokemonDetail('https://pokeapi.co/api/v2/pokemon/'+props.id)
+    .finally(() =>{
+        isLoading.value = false
+    })
+}
+
+onMounted(()=>{
+    loadData()    
+})
 </script>

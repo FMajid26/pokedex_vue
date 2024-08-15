@@ -23,7 +23,7 @@ function imageLoaded(){
 <template>
     <div @click="openModal" class="w-full flex flex-row pr-2 md:pr-5 pl-0 py-2 border-[1px] border-gray-200 text-black text-center rounded-[16px] cursor-pointer hover:outline hover:outline-pokeRed hover:outline-2 capitalize">
         <img src="../assets/img/pokeball-gray.png"
-            class="animate-spin basis-1/3 grow-0 w-full opacity-25"
+            class="animate-spin basis-1/3 grow-0 w-4 opacity-25"
             v-show="!isImageLoaded"
         >
         <img :src="props.items.sprites != null 
